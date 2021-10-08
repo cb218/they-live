@@ -34,15 +34,16 @@ jobs:
         run: |
           npm install
           npm run build --if present
+          npm test
           
-      # Run unit test
-      - name: Unit test
-        run: |
-          cd serverSide
-          node testAllQuotes.js
+#      # Run unit test
+#      - name: Unit test
+#        run: |
+#          cd serverSide
+#          node testAllQuotes.js
       
-      # Check if tests passed
-      - name: Pass check
-        if: 
-        run: echo "test passed"
+#      # Check if tests passed
+#      - name: Pass check
+#        if: 
+#        run: echo "test passed"
 
