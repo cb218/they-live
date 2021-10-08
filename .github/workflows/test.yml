@@ -37,23 +37,12 @@ jobs:
           
       # Run unit test
       - name: Unit test
-        id: unit-test
         run: |
-          EXPECTED_RESULT=$(cat << EOF
-          PASS T01
-          PASS T02
-          PASS T03
-          EOF
-          )
-          EXPECTED_RESULT="${EXPECTED_RESULT//'%'/'%25'}"
-          EXPECTED_RESULT="${EXPECTED_RESULT//$'\n'/'%0A'}"
-          EXPECTED_RESULT="${EXPECTED_RESULT//$'\r'/'%0D'}"
-          echo "::set-output name=OUTPUT::$EXPECTED_RESULT"
           cd serverSide
           node testAllQuotes.js
       
       # Check if tests passed
       - name: Pass check
-        if: steps.unit-test.outputs.OUTPUT == "$EXPECTED_RESULT"
+        if: 
         run: echo "test passed"
 
