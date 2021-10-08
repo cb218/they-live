@@ -54,6 +54,6 @@ jobs:
       
       # Check if tests passed
       - name: Pass check
-        if: steps.unit-test.outputs.OUTPUT == $EXPECTED_RESULT
+        if: steps.unit-test.outputs.OUTPUT == 0
         run: echo "test passed"
 
