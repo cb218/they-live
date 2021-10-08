@@ -39,8 +39,8 @@ jobs:
       - name: Unit test
         id: tests
         run: |
-          echo "::set-output name=test-result::"
+          echo "::set-output name=OUTPUT::$OUTPUT"
           cd serverSide
           node testAllQuotes.js
-        if: steps.tests.outputs.test-result == 0
+        if: steps.tests.outputs.OUTPUT-result == 0
 
