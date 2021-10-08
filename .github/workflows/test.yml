@@ -40,5 +40,5 @@ jobs:
       - name: Unit test
         run:  |
           cd serverSide
-          node testAllQuotes.js
+          node testAllQuotesFail.js
 
