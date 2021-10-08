@@ -38,5 +38,7 @@ jobs:
           
       # Run unit test
       - name: Unit test
-        run: node ./serverSide/testAllQuotes.js
+        run:  |
+          cd serverSide
+          node testAllQuotes.js
 
