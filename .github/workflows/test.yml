@@ -37,10 +37,20 @@ jobs:
           
       # Run unit test
       - name: Unit test
+        run: |
+          EXPECTED_RESULT=$(cat << EOF
+          PASS T01
+          PASS T02
+          PASS T03
+          EOF
+          )
+          EXPECTED_RESULT="${EXPECTED_RESULT//'%'/'%25'}"
+          EXPECTED_RESULT="${EXPECTED_RESULT//$'\n'/'%0A'}"
+          EXPECTED_RESULT="${EXPECTED_RESULT//$'\r'/'%0D'}"
+          echo "::set-output name=OUTPUT::$EXPECTED_RESULT"
         id: tests
         run: |
-          echo "::set-output name=OUTPUT::$OUTPUT"
           cd serverSide
           node testAllQuotes.js
-        if: steps.tests.outputs.OUTPUT-result == 0
+        if: steps.tests.outputs.OUTPUT == $EXPECTED_RESULT echo "fail"
 
