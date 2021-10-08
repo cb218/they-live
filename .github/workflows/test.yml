@@ -51,5 +51,5 @@ jobs:
           echo "::set-output name=OUTPUT::$EXPECTED_RESULT"
           cd serverSide
           node testAllQuotes.js
-        if: steps.tests.outputs.OUTPUT == $EXPECTED_RESULT echo "fail"
+        if: steps.tests.outputs.OUTPUT == 0 echo "fail"
 
