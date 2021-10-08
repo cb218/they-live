@@ -33,9 +33,10 @@ jobs:
       - name: Install dependencies build and test
         run: |
           npm install
-       #   npm test
+          npm run build --if present
+          npm test
           
       # Run unit test
       - name: Unit test
-        run: npm test ./serverSide/testAllQuotes.js
+        run: node ./serverSide/testAllQuotes.js
 
