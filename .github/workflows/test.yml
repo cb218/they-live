@@ -53,6 +53,7 @@ jobs:
           node testAllQuotes.js
       
       # Check if tests passed
+      - name: Pass check
         if: steps.unit-test.outputs.OUTPUT == $EXPECTED_RESULT
         run: echo "test passed"
 
