@@ -37,5 +37,5 @@ jobs:
           
       # Run unit test
       - name: Unit test
-        run: npm ./serverSide/testAllQuotes.js
+        run: npm test ./serverSide/testAllQuotes.js
 
