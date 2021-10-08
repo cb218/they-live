@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies build and test
         run: |
           npm install
-          npm test
+      #    npm test
           
       # Run unit test
       - name: Unit test
