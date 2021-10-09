@@ -33,11 +33,11 @@ jobs:
       - name: Unit test
         run: |
           cd serverSide
-          node testAllQuotes.js
+          node testAllQuotesFail.js
 #  deploy:
 #    needs:
 #      job: build
 #    steps:
-#      - name: Ready for deployment
-#        run: echo "Unit tests passed, code deploying to test environment"
+      - name: Ready for deployment
+        run: echo "Unit tests passed, code deploying to test environment"
 
