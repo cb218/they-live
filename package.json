@@ -4,7 +4,7 @@
   "description": "Server side express server for the quoteServer project. See Evernote 20200709 - Software Development for the Continuous SE course",
   "main": "server.js",
   "scripts": {
-    "test": "./serverSide/testAllQuotes.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",

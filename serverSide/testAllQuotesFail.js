@@ -8,6 +8,7 @@ function logPass(tName){
 }
 function logFail(tName){
     console.log("FAIL - " + tName )
+    process.exit(1)
 }
 // T01 - Search for a quote and suceed
 let aq01 = new AllQuotes();
