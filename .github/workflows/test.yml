@@ -30,14 +30,11 @@ jobs:
           npm install
           npm run build --if present 
       # Run unit test
-      - name: Unit test
+      - name: Run unit test
         run: |
           cd serverSide
-          node testAllQuotesFail.js
-#  deploy:
-#    needs:
-#      job: build
-#    steps:
+          node testAllQuotes.js
+      # Ready to deploy
       - name: Ready for deployment
         run: echo "Unit tests passed, code deploying to test environment"
 
