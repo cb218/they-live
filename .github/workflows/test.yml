@@ -11,38 +11,33 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [12.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
       # Initialize Node.js
       - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-    
       # Install dependencies -- build -- test
       - name: Install dependencies build and test
         run: |
           npm install
-          npm run build --if present
-          
+          npm run build --if present 
       # Run unit test
       - name: Unit test
         run: |
           cd serverSide
-          node testAllQuotesFail.js
-      
-#      # Check if tests passed
-#      - name: Pass check
-#        if: 
-#        run: echo "test passed"
+          node testAllQuotes.js
+  deploy:
+    needs:
+      job: build
+      steps:
+      - name: Ready for deployment
+        run: echo "Unit tests passed, code deploying to test environment..."
 
