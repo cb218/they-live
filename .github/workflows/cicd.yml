@@ -50,7 +50,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      # Copy to S3 bucket?
+      # Copy to S3 bucket
       - name: S3 bucket
         run: aws s3 cp deployment.tar.gz s3://cb218-work-bucket/deployment.tar.gz
 #
