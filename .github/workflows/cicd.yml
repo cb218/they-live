@@ -52,7 +52,7 @@ jobs:
           aws-region: us-east-1
       # Copy to S3 bucket?
       - name: s3 bucket
-          run |
+        run: |
             tar -cvf deployment.tar data serverSide
             gzip deployment.tar
             aws s3 cp deployment.tar.gz s3://cb218-work-bucket/deployment.tar.gz
