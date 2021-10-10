@@ -53,18 +53,26 @@ jobs:
       # Copy to S3 bucket
       - name: S3 bucket
         run: aws s3 cp deployment.tar.gz s3://cb218-work-bucket/deployment.tar.gz
-
+      # Copy to EC2 test instance
+      - name: Launch EC2 test instance
+        run: |
+          aws ec2 run-instances \
+          --image-id ami-008518b5dc809f075 --count 1 \
+          --instance-type t2.micro \
+          --key-name kpdefault \
+          --security-group-ids sg-0181f12d27af6ebba \
+          --subnet-id subnet-0149b64d
 
 #            gunzip deployment.tar.gz
 #            tar -xf deployment.tar
 
-      # Deploy to AWS
-      - name: Deploy to AWS
-        run: |
-          aws deploy create-deployment \
-          --application-name ${{ matrix.appname }} \
-          --deployment-config-name CodeDeployDefault.OneAtATime \
-          --deployment-group-name ${{ matrix.deploy-group }} \
-          --file-exists-behavior OVERWRITE \
-          --description "GitHub Deployment for the ${{ matrix.appname }}-${{ github.sha }}" \
-          --github-location repository=${{ matrix.repo }},commitId=${{ github.sha }}
+#      # Deploy to AWS
+#      - name: Deploy to AWS
+#        run: |
+#          aws deploy create-deployment \
+#          --application-name ${{ matrix.appname }} \
+#          --deployment-config-name CodeDeployDefault.OneAtATime \
+#          --deployment-group-name ${{ matrix.deploy-group }} \
+#          --file-exists-behavior OVERWRITE \
+#          --description "GitHub Deployment for the ${{ matrix.appname }}-${{ github.sha }}" \
+#          --github-location repository=${{ matrix.repo }},commitId=${{ github.sha }}
