@@ -54,6 +54,7 @@ jobs:
       - name: S3 bucket
         run: aws s3 cp deployment.tar.gz s3://cb218-work-bucket/deployment.tar.gz
 
+
 #            gunzip deployment.tar.gz
 #            tar -xf deployment.tar
 
