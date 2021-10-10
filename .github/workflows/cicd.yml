@@ -53,7 +53,7 @@ jobs:
       # Copy to S3 bucket?
       - name: S3 bucket
         run: aws s3 cp deployment.tar.gz s3://cb218-work-bucket/deployment.tar.gz
-
+#
 
 #        uses: jakejarvis/s3-sync-action@master
 #        with:
