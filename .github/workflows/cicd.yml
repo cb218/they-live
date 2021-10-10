@@ -63,6 +63,7 @@ jobs:
           --security-group-ids sg-0181f12d27af6ebba \
           --subnet-id subnet-0149b64d
 
+
 #            gunzip deployment.tar.gz
 #            tar -xf deployment.tar
 
