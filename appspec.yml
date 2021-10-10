@@ -8,6 +8,3 @@ hooks:
     - location: start.sh
       timeout: 300
       runas: root
-      run: |
-        chmod +x start.sh
-        ./start.sh
