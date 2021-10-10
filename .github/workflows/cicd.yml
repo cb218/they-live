@@ -16,6 +16,9 @@ jobs:
       matrix:
         node-version: [12.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        appname: ['quoterepo']
+        deploy-group: ['githubdeploy']
+        repo: ['cb218/they-live']
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -40,4 +43,20 @@ jobs:
           echo "Unit tests passed, code deploying to test environment"
           tar -cvf deployment.tar data serverSide
           gzip deployment.tar
-
+      # Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      # Deploy to AWS
+      - name: Deploy to AWS
+        run: |
+          aws deploy create-deployment \
+          --application-name ${{ matrix.appname }} \
+          --deployment-config-name CodeDeployDefault.OneAtATime \
+          --deployment-group-name ${{ matrix.deploy-group }} \
+          --file-exists-behavior OVERWRITE \
+          --description "GitHub Deployment for the ${{ matrix.appname }}-${{ github.sha }}" \
+          --github-location repository=${{ matrix.repo }},commitId=${{ github.sha }}
