@@ -33,8 +33,11 @@ jobs:
       - name: Run unit test
         run: |
           cd serverSide
-          node testAllQuotesFail.js
+          node testAllQuotes.js
       # Ready to deploy
       - name: Ready for deployment
-        run: echo "Unit tests passed, code deploying to test environment"
+        run: |
+          echo "Unit tests passed, code deploying to test environment"
+          tar -cvf deployment.tar data serverSide
+          gzip deployment.tar
 
