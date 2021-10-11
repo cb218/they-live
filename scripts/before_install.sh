@@ -1,0 +1,2 @@
+mkdir /quoterepo
+cd quoterepo

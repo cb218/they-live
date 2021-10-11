@@ -1,10 +1,12 @@
 version: 0.0
 os: linux
 files:
-  - source: source
-    destination: /home/aws-codedeploy
+  - source: /
+    destination: /quoterepo
 hooks:
-  ApplicationStart:
-    - location: start.sh
+  BeforeInstall:
+    - location: scripts/before_install.sh
       timeout: 300
-      runas: root
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 300
