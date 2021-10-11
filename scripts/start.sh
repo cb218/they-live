@@ -1,4 +1,3 @@
 #!/bin/bash
 cd /home/ubuntu/quoterepo/serverSide
-npm install pm2@latest -g
 node server.js
