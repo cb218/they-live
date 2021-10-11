@@ -75,8 +75,7 @@ jobs:
            --deployment-group-name ${{ matrix.deploy-group }} \
            --file-exists-behavior OVERWRITE \
            --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
-      
-      
+            
       # # Copy to S3 bucket
       # - name: S3 bucket
       #   run: aws s3 cp deployment.tar.gz s3://cb218-work-bucket/deployment.tar.gz
