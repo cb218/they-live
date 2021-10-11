@@ -2,14 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: .
-    destination: /home/ubuntu/quoterepo
-# permissions:
-#   - object: /home/ubuntu
-#     owner: ubuntu
-#     group: ubuntu
-#     type:
-#       - directory
-#       - file
+    destination: /home/ec2-user/quoterepo
 hooks:
   ApplicationStart:
     - location: scripts/start.sh
