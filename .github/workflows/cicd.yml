@@ -16,9 +16,10 @@ jobs:
       matrix:
         node-version: [12.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        appname: ['quoterepo']
-        deploy-group: ['githubdeploy']
-        repo: ['cb218/they-live']
+        appname: ['aws-codedeploy']
+        deploy-group: ['staging']
+        s3-bucket: ['cb218-work-bucket']
+        s3-filename: ['cb218-work-bucket-${{ github.sha }}']
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -41,8 +42,14 @@ jobs:
       - name: Ready for deployment
         run: |
           echo "Unit tests passed, code deploying to test environment"
-          tar -cvf deployment.tar data serverSide
-          gzip deployment.tar
+#          # tar -cvf deployment.tar data serverSide
+#          # gzip deployment.tar
+      # Install AWS CLI 2
+      - name: Install AWS CLI 2
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
       # Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -50,18 +57,38 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      # Copy to S3 bucket
-      - name: S3 bucket
-        run: aws s3 cp deployment.tar.gz s3://cb218-work-bucket/deployment.tar.gz
-      # Copy to EC2 test instance
-      - name: Launch EC2 test instance
+      # Deploy push to AWS S3
+      - name: AWS Deploy push
         run: |
-          aws ec2 run-instances \
-          --image-id ami-008518b5dc809f075 --count 1 \
-          --instance-type t2.micro \
-          --key-name kpdefault \
-          --security-group-ids sg-0181f12d27af6ebba \
-          --subnet-id subnet-0149b64d
+          aws deploy push \
+          --application-name ${{ matrix.appname }} \
+          --description "This is a revision for the ${{ matrix.appname }}-${{ github.sha }}" \
+          --ignore-hidden-files \
+          --s3-location s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }}.zip \
+          --source .
+      # Create deployment to CodeDeploy
+      - name: AWS Create Deployment
+        run: |
+          aws deploy create-deployment \
+           --application-name ${{ matrix.appname }} \
+           --deployment-config-name CodeDeployDefault.OneAtATime \
+           --deployment-group-name ${{ matrix.deploy-group }} \
+           --file-exists-behavior OVERWRITE \
+           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
+      
+      
+      # # Copy to S3 bucket
+      # - name: S3 bucket
+      #   run: aws s3 cp deployment.tar.gz s3://cb218-work-bucket/deployment.tar.gz
+      # # Copy to EC2 test instance
+      # - name: Launch EC2 test instance
+      #   run: |
+      #     aws ec2 run-instances \
+      #     --image-id ami-008518b5dc809f075 --count 1 \
+      #     --instance-type t2.micro \
+      #     --key-name kpdefault \
+      #     --security-group-ids sg-0181f12d27af6ebba \
+      #     --subnet-id subnet-0149b64d
 
 
 #            gunzip deployment.tar.gz
