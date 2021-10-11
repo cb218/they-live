@@ -64,7 +64,7 @@ jobs:
           --application-name ${{ matrix.appname }} \
           --description "This is a revision for the ${{ matrix.appname }}-${{ github.sha }}" \
           --ignore-hidden-files \
-          --s3-location s3://${{ matrix.appname }}-${{ github.sha }}.zip \
+          --s3-location s3://${{ matrix.s3-filename }}-${{ github.sha }}.zip \
           --source .
       # Create deployment to CodeDeploy
       - name: AWS Create Deployment
