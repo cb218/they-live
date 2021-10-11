@@ -94,13 +94,3 @@ jobs:
 #            gunzip deployment.tar.gz
 #            tar -xf deployment.tar
 
-#      # Deploy to AWS
-#      - name: Deploy to AWS
-#        run: |
-#          aws deploy create-deployment \
-#          --application-name ${{ matrix.appname }} \
-#          --deployment-config-name CodeDeployDefault.OneAtATime \
-#          --deployment-group-name ${{ matrix.deploy-group }} \
-#          --file-exists-behavior OVERWRITE \
-#          --description "GitHub Deployment for the ${{ matrix.appname }}-${{ github.sha }}" \
-#          --github-location repository=${{ matrix.repo }},commitId=${{ github.sha }}
