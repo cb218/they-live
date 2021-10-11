@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /home/ubuntu/quoterepo
-pm2 startOrReload ecosystem.config.js 
+cd /home/ubuntu/quoterepo/
+pm2 quoterepo ecosystem.config.js 
