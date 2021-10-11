@@ -1,5 +1,2 @@
 #!/bin/bash
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-cd /home/ubuntu/quoterepo/serverSide
-pm2 start server.js
+/home/ec2-user/.nvm/versions/node/v16.11.0/bin/pm2 start /home/ubuntu/quoterepo/serverSide/server.js
