@@ -16,7 +16,7 @@ jobs:
       matrix:
         node-version: [12.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        appname: ['aws-codedeploy']
+        appname: ['quoterepo']
         deploy-group: ['staging']
         s3-bucket: ['cb218-work-bucket']
         s3-filename: ['cb218-work-bucket-${{ github.sha }}']
