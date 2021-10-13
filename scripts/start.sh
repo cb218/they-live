@@ -1,4 +1,7 @@
 #!/bin/bash
-source /home/ec2-user/.bash_profile
+\. /home/ec2-user/.bashrc
+
+npm install pm2@latest -g
+
 cd /home/ubuntu/quoterepo/serverSide
-node server.js
+pm2 start server.js
