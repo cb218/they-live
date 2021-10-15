@@ -9,7 +9,7 @@
 
 // Load my class that holds the set of quotations
 const AllQuotes = require('./AllQuotes');
-const QUOTE_DB_FILE = "../data/quotes_all.csv"
+const QUOTE_DB_FILE = "/home/ec2-user/quoterepo/data/quotes_all.csv"
 
 // Load and configure the Express web server
 const express = require('express');
