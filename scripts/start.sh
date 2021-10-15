@@ -1,4 +1,3 @@
 source /home/ec2-user/.bash_profile
 
-cd /home/ec2-user/quoterepo/serverSide
-pm2 start -f server.js
+pm2 start -f /home/ec2-user/quoterepo/serverSide/server.js
