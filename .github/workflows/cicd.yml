@@ -42,8 +42,6 @@ jobs:
       - name: Ready for deployment
         run: |
           echo "Unit tests passed, code deploying to test environment"
-#          # tar -cvf deployment.tar data serverSide
-#          # gzip deployment.tar
       # Install AWS CLI 2
       - name: Install AWS CLI 2
         run: |
@@ -75,21 +73,3 @@ jobs:
            --deployment-group-name ${{ matrix.deploy-group }} \
            --file-exists-behavior OVERWRITE \
            --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
-            
-      # # Copy to S3 bucket
-      # - name: S3 bucket
-      #   run: aws s3 cp deployment.tar.gz s3://cb218-work-bucket/deployment.tar.gz
-      # # Copy to EC2 test instance
-      # - name: Launch EC2 test instance
-      #   run: |
-      #     aws ec2 run-instances \
-      #     --image-id ami-008518b5dc809f075 --count 1 \
-      #     --instance-type t2.micro \
-      #     --key-name kpdefault \
-      #     --security-group-ids sg-0181f12d27af6ebba \
-      #     --subnet-id subnet-0149b64d
-
-
-#            gunzip deployment.tar.gz
-#            tar -xf deployment.tar
-
