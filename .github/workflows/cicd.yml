@@ -16,8 +16,10 @@ jobs:
       matrix:
         node-version: [12.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        appname: ['quoteserver']
+        test-appname: ['quoteserver']
         test-deploy-group: ['staging']
+        production-appname: ['production-site']
+        production-deploy-group: ['production']
         s3-bucket: ['cb218-work-bucket']
         s3-filename: ['cb218-work-bucket-${{ github.sha }}']
     steps:
@@ -38,16 +40,11 @@ jobs:
         run: |
           cd serverSide
           node testAllQuotes.js
+          cd
       # Ready to deploy
       - name: Ready for deployment
         run: |
           echo "Unit tests passed, code deploying to test environment"
-      # Install AWS CLI 2
-#      - name: Install AWS CLI 2
-#        run: |
-#          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-#          unzip awscliv2.zip
-#          sudo ./aws/install --update
       # Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -59,17 +56,31 @@ jobs:
       - name: AWS Deploy push
         run: |
           aws deploy push \
-          --application-name ${{ matrix.appname }} \
-          --description "This is a revision for the ${{ matrix.appname }}-${{ github.sha }}" \
+          --application-name ${{ matrix.test-appname }} \
+          --description "This is a revision for the ${{ matrix.test-appname }}-${{ github.sha }}" \
           --ignore-hidden-files \
           --s3-location s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }}.zip \
           --source .
-      # Create deployment to CodeDeploy
+      # Create CodeDeploy deployment to test instance
       - name: AWS Create Deployment
         run: |
           aws deploy create-deployment \
-           --application-name ${{ matrix.appname }} \
+           --application-name ${{ matrix.test-appname }} \
            --deployment-config-name CodeDeployDefault.OneAtATime \
            --deployment-group-name ${{ matrix.test-deploy-group }} \
+           --file-exists-behavior OVERWRITE \
+           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
+      # Run tests in browser
+      - name: UI testing
+        run: |
+          chmod +x ui-test.sh
+          ./ui-test.sh
+      # Create CodeDeploy deployment to production instance
+      - name: AWS Create Deployment
+        run: |
+          aws deploy create-deployment \
+           --application-name ${{ matrix.production-appname }} \
+           --deployment-config-name CodeDeployDefault.OneAtATime \
+           --deployment-group-name ${{ matrix.production-deploy-group }} \
            --file-exists-behavior OVERWRITE \
            --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
