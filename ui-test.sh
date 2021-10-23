@@ -4,6 +4,9 @@ curl http://52.6.144.203:3000/search?search_string=money > moneysearch.txt
 curl http://52.6.144.203:3000/search?search_string=asdfghjk > asdfghjk.txt
 
 grep "Quote Server" welcomepage.txt 
+grep "money" moneysearch.txt
+grep "Noogalaboo" asdfghjk.txt
+
 
 # if [ grep "Quote Server" welcomepage.txt == 0 ]
 # then
