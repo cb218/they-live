@@ -17,7 +17,7 @@ jobs:
         node-version: [12.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         appname: ['quoteserver']
-        deploy-group: ['staging']
+        test-deploy-group: ['staging']
         s3-bucket: ['cb218-work-bucket']
         s3-filename: ['cb218-work-bucket-${{ github.sha }}']
     steps:
@@ -43,11 +43,11 @@ jobs:
         run: |
           echo "Unit tests passed, code deploying to test environment"
       # Install AWS CLI 2
-      - name: Install AWS CLI 2
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install --update
+#      - name: Install AWS CLI 2
+#        run: |
+#          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+#          unzip awscliv2.zip
+#          sudo ./aws/install --update
       # Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -70,6 +70,6 @@ jobs:
           aws deploy create-deployment \
            --application-name ${{ matrix.appname }} \
            --deployment-config-name CodeDeployDefault.OneAtATime \
-           --deployment-group-name ${{ matrix.deploy-group }} \
+           --deployment-group-name ${{ matrix.test-deploy-group }} \
            --file-exists-behavior OVERWRITE \
            --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
