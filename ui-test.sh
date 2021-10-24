@@ -24,10 +24,10 @@ fi
 TEST3VAL=$(grep -c "No matching quote found" asdfghjk.txt)
 if [ $TEST3VAL == 0 ]
 then
-  echo "Test 3 passed, fake word search unsuccessful."
-else
   echo "Test 3 failed, fake word search failed."
   exit 1
+else
+  echo "Test 3 passed, fake word search unsuccessful."
 fi
 
 echo "Deploying to production environment!"
