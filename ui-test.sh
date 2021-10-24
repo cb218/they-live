@@ -9,7 +9,7 @@ echo "Test 1 passed, server up and running."
 grep "money" moneysearch.txt
 echo "Test 2 passed, 'money' search successful."
 
-grep "oogalaboo" asdfghjk.txt
+grep "Noogalaboo" asdfghjk.txt
 echo "Test 3 passed, fake word search unsuccessful."
 
 echo "Deploying to production environment!"
