@@ -13,6 +13,7 @@ curl http://52.6.144.203:3000/search?search_string=asdfghjk > asdfghjk.txt
 # echo "Test 3 passed, fake word search unsuccessful."
 
 TEST1VAL=$(grep -c "Quote Server" welcomepage.txt)
+echo TEST1VAL
 if [ TEST1VAL == 0 ]
 then
   echo "Test 1 passed, server up and running."
