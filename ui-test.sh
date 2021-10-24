@@ -14,7 +14,7 @@ curl http://52.6.144.203:3000/search?search_string=asdfghjk > asdfghjk.txt
 
 TEST1VAL=$(grep -c "Quote Server" welcomepage.txt)
 echo TEST1VAL
-if [ TEST1VAL == 0 ]
+if [ TEST1VAL > 0 ]
 then
   echo "Test 1 passed, server up and running."
 else
@@ -23,7 +23,7 @@ else
 fi
 
 TEST2VAL=$(grep -c "money" moneysearch.txt)
-if [ TEST2VAL == 0 ]
+if [ TEST2VAL > 0 ]
 then
   echo "Test 2 passed, 'money' search successful."
 else
@@ -32,7 +32,7 @@ else
 fi
 
 TEST3VAL=$(grep -c "No matching quote found" asdfghjk.txt)
-if [ TEST3VAL == 0 ]
+if [ TEST3VAL > 0 ]
 then
   echo "Test 3 passed, fake word search unsuccessful."
 else
