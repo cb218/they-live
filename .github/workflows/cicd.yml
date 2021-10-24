@@ -21,7 +21,7 @@ jobs:
         production-appname: ['production-site']
         production-deploy-group: ['production']
         s3-bucket: ['cb218-work-bucket']
-        s3-filename: ['cb218-work-bucket-${{ github.sha }}']
+        s3-filename: ['quoterepo']
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -57,7 +57,7 @@ jobs:
         run: |
           aws deploy push \
           --application-name ${{ matrix.test-appname }} \
-          --description "This is a revision for the ${{ matrix.test-appname }}-${{ github.sha }}" \
+          --description "This is a revision for the ${{ matrix.test-appname }}" \
           --ignore-hidden-files \
           --s3-location s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }}.zip \
           --source .
@@ -75,6 +75,15 @@ jobs:
         run: |
           chmod +x ui-test.sh
           ./ui-test.sh
+      # Deploy push to AWS S3
+      - name: AWS Deploy push
+        run: |
+          aws deploy push \
+          --application-name ${{ matrix.production-appname }} \
+          --description "This is a revision for the ${{ matrix.production-appname }}" \
+          --ignore-hidden-files \
+          --s3-location s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }}.zip \
+          --source .
       # Create CodeDeploy deployment to production instance
       - name: AWS Create Deployment
         run: |
