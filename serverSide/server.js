@@ -49,7 +49,7 @@ function getResponseHTML(sString){
             <title>Quote Server Page</title>
         </head>
         <body>
-            <h2>Quote Server Demo 4</h2>
+            <h2>Quote Server Demo 4: Update 1</h2>
             <form action="/search">
                 <label for="search_string">Search string:</label><br>
                 <input type="text" id="search_string" name="search_string"><br> <br>

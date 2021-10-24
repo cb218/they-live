@@ -6,7 +6,7 @@ curl http://52.6.144.203:3000/search?search_string=asdfghjk > asdfghjk.txt
 grep "Quote Server" welcomepage.txt
 echo "Test 1 passed, server up and running."
 
-grep "money" moneysearch.txt
+grep "moneyzzzzzzz" moneysearch.txt
 echo "Test 2 passed, 'money' search successful."
 
 grep "No matching quote found" asdfghjk.txt
