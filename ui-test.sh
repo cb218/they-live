@@ -21,7 +21,8 @@ else
   echo "Test 2 passed, 'money' search successful."
 fi
 
-TEST3VAL=$(grep -c "No matching quote was found" asdfghjk.txt)
+#TEST3VAL=$(grep -c "No matching quote was found" asdfghjk.txt)
+TEST3VAL=$(grep -c "djkfalhdsjfhlew vf esv" asdfghjk.txt)
 if [ $TEST3VAL == 0 ]
 then
   echo "Test 3 failed, fake word search failed."
