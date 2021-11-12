@@ -72,13 +72,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Set up chromedriver
+      - name: Set up ChromeDriver
         uses: nanasess/setup-chromedriver@master
-      - name: Run chromedriver
+      - name: Run ChromeDriver
         run: |
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+      - name: Run Selenium tests using ChromeDriver
+        run: |
+          echo "Running tests here"
 # build-prod:
 #     needs: selenium
 #     runs-on: ubuntu-latest
