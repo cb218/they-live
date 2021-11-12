@@ -1,87 +1,117 @@
-# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: Node.js CI
 
-# on:
-#   push:
-#     branches: [ master ]
-#   pull_request:
-#     branches: [ master ]
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  build:
+  # build-test:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [12.x]
+  #       test-appname: ['quoteserver']
+  #       test-deploy-group: ['staging']
+  #       production-appname: ['production-site']
+  #       production-deploy-group: ['production']
+  #       s3-bucket: ['cb218-work-bucket']
+  #       s3-filename: ['quoterepo']
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v2
+  #     # Initialize Node.js
+  #     - name: Install Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+  #     # Install dependencies and build
+  #     - name: Install dependencies build and test
+  #       run: |
+  #         npm install
+  #         npm run build --if present 
+  #     # Run unit test
+  #     - name: Run unit test
+  #       run: |
+  #         cd serverSide
+  #         node testAllQuotes.js
+  #         cd
+  #     # Ready to deploy
+  #     - name: Ready for deployment
+  #       run: |
+  #         echo "Unit tests passed, code deploying to test environment"
+  #     # Configure AWS credentials
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
+  #     # Push repo to AWS S3
+  #     - name: Push repo to AWS S3
+  #       run: |
+  #         aws deploy push \
+  #         --application-name ${{ matrix.test-appname }} \
+  #         --description "This is a revision for the ${{ matrix.test-appname }}" \
+  #         --ignore-hidden-files \
+  #         --s3-location s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }}.zip \
+  #         --source .
+  #     # Create CodeDeploy deployment to test instance
+  #     - name: AWS Create Deployment
+  #       run: |
+  #         aws deploy create-deployment \
+  #          --application-name ${{ matrix.test-appname }} \
+  #          --deployment-config-name CodeDeployDefault.OneAtATime \
+  #          --deployment-group-name ${{ matrix.test-deploy-group }} \
+  #          --file-exists-behavior OVERWRITE \
+  #          --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
+selenium:
+    # needs: build-test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        test-appname: ['quoteserver']
-        test-deploy-group: ['staging']
-        production-appname: ['production-site']
-        production-deploy-group: ['production']
-        s3-bucket: ['cb218-work-bucket']
-        s3-filename: ['quoterepo']
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      # Initialize Node.js
-      - name: Install Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
         with:
-          node-version: ${{ matrix.node-version }}
-      # Install dependencies and build
-      - name: Install dependencies build and test
-        run: |
-          npm install
-          npm run build --if present 
-      # Run unit test
-      - name: Run unit test
-        run: |
-          cd serverSide
-          node testAllQuotes.js
-          cd
-      # Ready to deploy
-      - name: Ready for deployment
-        run: |
-          echo "Unit tests passed, code deploying to test environment"
-      # Configure AWS credentials
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      # Deploy push to AWS S3
-      - name: AWS Deploy push
-        run: |
-          aws deploy push \
-          --application-name ${{ matrix.test-appname }} \
-          --description "This is a revision for the ${{ matrix.test-appname }}" \
-          --ignore-hidden-files \
-          --s3-location s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }}.zip \
-          --source .
-      # Create CodeDeploy deployment to test instance
-      - name: AWS Create Deployment
-        run: |
-          aws deploy create-deployment \
-           --application-name ${{ matrix.test-appname }} \
-           --deployment-config-name CodeDeployDefault.OneAtATime \
-           --deployment-group-name ${{ matrix.test-deploy-group }} \
-           --file-exists-behavior OVERWRITE \
-           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
-      # Run tests in browser
-      - name: UI testing
-        run: |
-          chmod +x ui-test.sh
-          ./ui-test.sh
-      # # Create CodeDeploy deployment to production instance
-      # - name: AWS Create Deployment
-      #   run: |
-      #     aws deploy create-deployment \
-      #      --application-name ${{ matrix.production-appname }} \
-      #      --deployment-config-name CodeDeployDefault.OneAtATime \
-      #      --deployment-group-name ${{ matrix.production-deploy-group }} \
-      #      --file-exists-behavior OVERWRITE \
-      #      --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
+          java-version: 1.8
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+      - name: Test with Maven
+      run: mvn clean test
+      - name: Test with Maven
+      run: mvn -B package --file pom.xml test
+# build-prod:
+#     needs: selenium
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         node-version: [12.x]
+#         test-appname: ['quoteserver']
+#         test-deploy-group: ['staging']
+#         production-appname: ['production-site']
+#         production-deploy-group: ['production']
+#         s3-bucket: ['cb218-work-bucket']
+#         s3-filename: ['quoterepo']
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v2
+#       # Configure AWS credentials
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: us-east-1
+#       # Create CodeDeploy deployment to production instance
+#       - name: AWS Create Deployment
+#         run: |
+#           aws deploy create-deployment \
+#            --application-name ${{ matrix.production-appname }} \
+#            --deployment-config-name CodeDeployDefault.OneAtATime \
+#            --deployment-group-name ${{ matrix.production-deploy-group }} \
+#            --file-exists-behavior OVERWRITE \
+#            --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
+
 
