@@ -3,11 +3,11 @@
 
 name: Node.js CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+# on:
+#   push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
 
 jobs:
   build:
@@ -75,13 +75,13 @@ jobs:
         run: |
           chmod +x ui-test.sh
           ./ui-test.sh
-      # Create CodeDeploy deployment to production instance
-      - name: AWS Create Deployment
-        run: |
-          aws deploy create-deployment \
-           --application-name ${{ matrix.production-appname }} \
-           --deployment-config-name CodeDeployDefault.OneAtATime \
-           --deployment-group-name ${{ matrix.production-deploy-group }} \
-           --file-exists-behavior OVERWRITE \
-           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
+      # # Create CodeDeploy deployment to production instance
+      # - name: AWS Create Deployment
+      #   run: |
+      #     aws deploy create-deployment \
+      #      --application-name ${{ matrix.production-appname }} \
+      #      --deployment-config-name CodeDeployDefault.OneAtATime \
+      #      --deployment-group-name ${{ matrix.production-deploy-group }} \
+      #      --file-exists-behavior OVERWRITE \
+      #      --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
 
