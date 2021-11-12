@@ -79,9 +79,9 @@ selenium:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
       - name: Test with Maven
-      run: mvn clean test
+        run: mvn clean test
       - name: Test with Maven
-      run: mvn -B package --file pom.xml test
+        run: mvn -B package --file pom.xml test
 # build-prod:
 #     needs: selenium
 #     runs-on: ubuntu-latest
