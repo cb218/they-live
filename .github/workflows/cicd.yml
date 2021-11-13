@@ -7,65 +7,65 @@ on:
     branches: [ master ]
 
 jobs:
-  # build-test:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [12.x]
-  #       test-appname: ['quoteserver']
-  #       test-deploy-group: ['staging']
-  #       production-appname: ['production-site']
-  #       production-deploy-group: ['production']
-  #       s3-bucket: ['cb218-work-bucket']
-  #       s3-filename: ['quoterepo']
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v2
-  #     # Initialize Node.js
-  #     - name: Install Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #     # Install dependencies and build
-  #     - name: Install dependencies build and test
-  #       run: |
-  #         npm install
-  #         npm run build --if present 
-  #     # Run unit test
-  #     - name: Run unit test
-  #       run: |
-  #         cd serverSide
-  #         node testAllQuotes.js
-  #         cd
-  #     # Ready to deploy
-  #     - name: Ready for deployment
-  #       run: |
-  #         echo "Unit tests passed, code deploying to test environment"
-  #     # Configure AWS credentials
-  #     - name: Configure AWS credentials
-  #       uses: aws-actions/configure-aws-credentials@v1
-  #       with:
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws-region: us-east-1
-  #     # Push repo to AWS S3
-  #     - name: Push repo to AWS S3
-  #       run: |
-  #         aws deploy push \
-  #         --application-name ${{ matrix.test-appname }} \
-  #         --description "This is a revision for the ${{ matrix.test-appname }}" \
-  #         --ignore-hidden-files \
-  #         --s3-location s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }}.zip \
-  #         --source .
-  #     # Create CodeDeploy deployment to test instance
-  #     - name: AWS Create Deployment
-  #       run: |
-  #         aws deploy create-deployment \
-  #          --application-name ${{ matrix.test-appname }} \
-  #          --deployment-config-name CodeDeployDefault.OneAtATime \
-  #          --deployment-group-name ${{ matrix.test-deploy-group }} \
-  #          --file-exists-behavior OVERWRITE \
-  #          --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+        test-appname: ['quoteserver']
+        test-deploy-group: ['staging']
+        production-appname: ['production-site']
+        production-deploy-group: ['production']
+        s3-bucket: ['cb218-work-bucket']
+        s3-filename: ['quoterepo']
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      # Initialize Node.js
+      - name: Install Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      # Install dependencies and build
+      - name: Install dependencies build and test
+        run: |
+          npm install
+          npm run build --if present 
+      # Run unit test
+      - name: Run unit test
+        run: |
+          cd serverSide
+          node testAllQuotes.js
+          cd
+      # Ready to deploy
+      - name: Ready for deployment
+        run: |
+          echo "Unit tests passed, code deploying to test environment"
+      # Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      # Push repo to AWS S3
+      - name: Push repo to AWS S3
+        run: |
+          aws deploy push \
+          --application-name ${{ matrix.test-appname }} \
+          --description "This is a revision for the ${{ matrix.test-appname }}" \
+          --ignore-hidden-files \
+          --s3-location s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }}.zip \
+          --source .
+      # Create CodeDeploy deployment to test instance
+      - name: AWS Create Deployment
+        run: |
+          aws deploy create-deployment \
+           --application-name ${{ matrix.test-appname }} \
+           --deployment-config-name CodeDeployDefault.OneAtATime \
+           --deployment-group-name ${{ matrix.test-deploy-group }} \
+           --file-exists-behavior OVERWRITE \
+           --s3-location bucket=${{ matrix.s3-bucket }},key=${{ matrix.s3-filename }}.zip,bundleType=zip \
   selenium:
     # needs: build-test
     runs-on: ubuntu-latest
